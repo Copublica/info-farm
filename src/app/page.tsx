@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { ProductCard } from '@/components/ui/ProductCard';
 import { ArrowRight, Globe, ShieldCheck, Truck } from 'lucide-react';
 import { HomeHero } from '@/components/home/HomeHero';
+import { seedProducts } from '@/app/actions/product';
 
 export default async function HomePage() {
   let featuredProducts: any[] = [];
@@ -12,6 +13,15 @@ export default async function HomePage() {
       take: 4,
       orderBy: { createdAt: 'desc' }
     });
+
+    // Auto-seed if empty
+    if (featuredProducts.length === 0) {
+      await seedProducts();
+      featuredProducts = await prisma.product.findMany({
+        take: 4,
+        orderBy: { createdAt: 'desc' }
+      });
+    }
   } catch (err) {
     console.error("Error fetching featured products from Prisma:", err);
   }
