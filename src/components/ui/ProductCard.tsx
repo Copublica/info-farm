@@ -45,65 +45,54 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      whileHover={{ y: -8 }}
-      className="group bg-white rounded-[2rem] overflow-hidden border border-gray-100/50 shadow-sm hover:shadow-2xl hover:shadow-amber-900/5 transition-all duration-500"
+      className="bg-white rounded-[24px] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100"
     >
-      <Link href={`/product/${product.id}`} className="block relative aspect-[4/5] overflow-hidden">
+      <Link href={`/product/${product.id}`} className="block relative aspect-square overflow-hidden">
         {product.imageUrl ? (
           <img 
             src={product.imageUrl} 
             alt={product.name} 
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
         ) : (
           <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300">
-            <Gem className="w-12 h-12 opacity-20" />
+            <Gem className="w-12 h-12" />
           </div>
         )}
-        
-        {/* Overlay Actions */}
-        <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        
         <button 
           onClick={handleToggleFav}
           className={cn(
-            "absolute top-4 right-4 p-3 rounded-full backdrop-blur-md transition-all duration-300 z-10",
-            favorited 
-              ? "bg-amber-600 text-white" 
-              : "bg-white/80 text-gray-900 hover:bg-white pb-2"
+            "absolute top-4 right-4 p-2.5 rounded-full shadow-md transition-all duration-300",
+            favorited ? "bg-white text-red-500" : "bg-white/80 text-gray-400 hover:text-red-500"
           )}
         >
-          <Heart className={cn("w-4.5 h-4.5", favorited && "fill-current")} />
+          <Heart className={cn("w-5 h-5", favorited && "fill-current")} />
         </button>
       </Link>
 
-      <div className="p-6">
-        <div className="flex flex-col gap-1 mb-4">
-          <span className="text-[10px] font-display font-bold uppercase tracking-[0.2em] text-amber-700/60">
-            {product.category}
-          </span>
-          <Link href={`/product/${product.id}`}>
-            <h3 className="text-xl font-serif text-gray-900 group-hover:text-amber-700 transition-colors line-clamp-1">
-              {product.name}
-            </h3>
-          </Link>
+      <div className="p-5">
+        <div className="flex items-center gap-1.5 mb-2">
+          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+          <span className="text-xs font-bold text-gray-700">{product.rating?.toFixed(1) || '4.5'}</span>
+          <span className="text-xs text-gray-400">({product.reviewCount || 0})</span>
         </div>
-
-        <div className="flex items-center justify-between mt-auto">
-          <div className="flex flex-col">
-            <span className="text-[10px] text-gray-400 uppercase tracking-widest font-medium">Price</span>
-            <span className="text-xl font-display font-semibold text-gray-900">
-              ₹{product.price.toLocaleString()}
-            </span>
-          </div>
-
+        
+        <Link href={`/product/${product.id}`}>
+          <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1 group-hover:text-amber-700 transition-colors">
+            {product.name}
+          </h3>
+        </Link>
+        
+        <p className="text-sm font-semibold text-amber-600 mb-4">{product.category}</p>
+        
+        <div className="flex items-center justify-between">
+          <span className="text-xl font-black text-gray-900">₹{product.price.toLocaleString()}</span>
           <button 
             onClick={handleAddToCart}
-            className="w-12 h-12 bg-gray-900 text-white rounded-full flex items-center justify-center hover:bg-amber-700 transition-all duration-300 shadow-lg active:scale-95"
-            title="Add to Cart"
+            className="bg-orange-50 text-orange-600 p-3 rounded-full hover:bg-orange-500 hover:text-white transition-all shadow-sm"
           >
             <ShoppingCart className="w-5 h-5" />
           </button>

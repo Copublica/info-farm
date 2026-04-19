@@ -21,51 +21,42 @@ export default async function HomePage() {
       {/* Hero Section */}
       <HomeHero />
 
-      {/* Features - Horizontal Grid */}
-      <section className="py-24 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-16">
-          <div className="flex flex-col gap-6 group">
-            <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-700 transition-colors group-hover:bg-amber-700 group-hover:text-white">
-              <Truck className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="text-xs font-display font-bold uppercase tracking-widest text-gray-900 mb-2">Pristine Delivery</h3>
-              <p className="text-gray-500 font-serif italic text-lg leading-relaxed">Direct from the Himalayan valleys to your doorstep, with unmatched care and speed.</p>
-            </div>
+      {/* Features */}
+      <section className="py-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="flex flex-col items-center text-center p-8 bg-white rounded-3xl shadow-sm border border-gray-50 group hover:shadow-xl transition-all">
+          <div className="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center text-orange-600 mb-6 group-hover:scale-110 transition-transform">
+            <Truck className="w-10 h-10" />
           </div>
-          
-          <div className="flex flex-col gap-6 group">
-            <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-700 transition-colors group-hover:bg-amber-700 group-hover:text-white">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="text-xs font-display font-bold uppercase tracking-widest text-gray-900 mb-2">Authentic Provenance</h3>
-              <p className="text-gray-500 font-serif italic text-lg leading-relaxed">Every gemstone and organic nut is rigorously certified for authenticity and purity.</p>
-            </div>
+          <h3 className="text-xl font-bold mb-3">Fast Delivery</h3>
+          <p className="text-gray-500 text-sm leading-relaxed">Direct to your door, safely and quickly.</p>
+        </div>
+        
+        <div className="flex flex-col items-center text-center p-8 bg-white rounded-3xl shadow-sm border border-gray-50 group hover:shadow-xl transition-all">
+          <div className="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center text-orange-600 mb-6 group-hover:scale-110 transition-transform">
+            <ShieldCheck className="w-10 h-10" />
           </div>
+          <h3 className="text-xl font-bold mb-3">Certified Quality</h3>
+          <p className="text-gray-500 text-sm leading-relaxed">100% authentic stones and premium organic nuts.</p>
+        </div>
 
-          <div className="flex flex-col gap-6 group">
-            <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-700 transition-colors group-hover:bg-amber-700 group-hover:text-white">
-              <Globe className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="text-xs font-display font-bold uppercase tracking-widest text-gray-900 mb-2">Ethical Sourcing</h3>
-              <p className="text-gray-500 font-serif italic text-lg leading-relaxed">Supporting local artisans and farmers through sustainable and fair-trade practices.</p>
-            </div>
+        <div className="flex flex-col items-center text-center p-8 bg-white rounded-3xl shadow-sm border border-gray-50 group hover:shadow-xl transition-all">
+          <div className="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center text-orange-600 mb-6 group-hover:scale-110 transition-transform">
+            <Globe className="w-10 h-10" />
           </div>
+          <h3 className="text-xl font-bold mb-3">Global Shipping</h3>
+          <p className="text-gray-500 text-sm leading-relaxed">Delivering true wellness globally.</p>
         </div>
       </section>
 
       {/* Featured Products */}
-      <section className="py-24 max-w-7xl mx-auto px-4">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
-          <div className="max-w-xl">
-            <span className="text-amber-700 font-display text-[10px] font-bold uppercase tracking-[0.3em] mb-4 block">Seasonal Selection</span>
-            <h2 className="text-5xl md:text-6xl font-serif text-gray-900 leading-tight">Curated <span className="italic">Treasures</span></h2>
-            <p className="text-gray-500 mt-6 text-lg font-light leading-relaxed">A handpicked selection of our finest offerings, carefully assembled for the discerning seeker of wellness and alignment.</p>
+      <section className="py-12">
+        <div className="flex items-end justify-between mb-10">
+          <div>
+            <h2 className="text-4xl font-bold text-gray-900">Featured Products</h2>
+            <p className="text-gray-500 mt-2 text-lg italic font-medium">Latest additions to our catalog.</p>
           </div>
-          <Link href="/shop" className="inline-flex items-center gap-2 text-gray-900 font-display font-bold uppercase tracking-widest text-[10px] border-b-2 border-amber-500 pb-1 hover:text-amber-700 transition-colors whitespace-nowrap">
-            Explore All <ArrowRight className="w-4 h-4" />
+          <Link href="/shop" className="text-orange-600 font-bold hover:underline flex items-center gap-2 group">
+            View All <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 
@@ -76,8 +67,8 @@ export default async function HomePage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-32 bg-white rounded-[3rem] border border-dashed border-gray-200">
-            <p className="text-gray-400 font-serif italic text-xl">The vaults are currently empty. Check back momentarily.</p>
+          <div className="text-center py-24 bg-white rounded-[40px] border border-dashed border-gray-300">
+            <p className="text-gray-500 text-xl font-medium">No products available. Admin needs to add products.</p>
           </div>
         )}
       </section>
