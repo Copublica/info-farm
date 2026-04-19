@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { collection, query, getDocs, deleteDoc, doc, addDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { db, handleFirestoreError, OperationType } from '../../lib/firebase';
-import { Product } from '../../components/ui/ProductCard';
-import { Trash2, Edit2, Plus, X } from 'lucide-react';
+'use client';
 
-export function AdminProducts() {
-  const [products, setProducts] = useState<Product[]>([]);
+import React, { useEffect, useState } from 'react';
+import { Plus, Edit2, Trash2, X } from 'lucide-react';
+
+export default function AdminProductsPage() {
+  const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-
+  
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -20,15 +19,10 @@ export function AdminProducts() {
   });
 
   const fetchProducts = async () => {
-    try {
-      const q = query(collection(db, 'products'));
-      const querySnapshot = await getDocs(q);
-      setProducts(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product)));
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    const res = await fetch('/api/products');
+    const data = await res.json();
+    setProducts(data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -36,16 +30,12 @@ export function AdminProducts() {
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
-    try {
-      await deleteDoc(doc(db, 'products', id));
-      setProducts(products.filter(p => p.id !== id));
-    } catch (error) {
-      handleFirestoreError(error, OperationType.DELETE, `products/${id}`);
-    }
+    if (!confirm("Delete product?")) return;
+    await fetch(`/api/products/${id}`, { method: 'DELETE' });
+    fetchProducts();
   };
 
-  const handleEdit = (product: Product) => {
+  const handleEdit = (product: any) => {
     setFormData({
       name: product.name,
       description: product.description || '',
@@ -66,42 +56,34 @@ export function AdminProducts() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const productData = {
-      name: formData.name,
-      description: formData.description,
+    const payload = {
+      ...formData,
       price: Number(formData.price),
-      category: formData.category,
-      imageUrl: formData.imageUrl,
       stock: Number(formData.stock),
     };
 
-    try {
-      if (editingId) {
-        await updateDoc(doc(db, 'products', editingId), productData);
-      } else {
-        await addDoc(collection(db, 'products'), {
-          ...productData,
-          rating: 0,
-          reviewCount: 0,
-          createdAt: serverTimestamp(),
-        });
-      }
-      resetForm();
-      fetchProducts();
-    } catch (error) {
-      handleFirestoreError(error, editingId ? OperationType.UPDATE : OperationType.CREATE, 'products');
-    }
+    const method = editingId ? 'PUT' : 'POST';
+    const url = editingId ? `/api/products/${editingId}` : '/api/products';
+
+    await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    resetForm();
+    fetchProducts();
   };
 
-  if (loading) return <div>Loading products...</div>;
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold">Manage Products</h1>
         <button 
-          onClick={() => { resetForm(); setIsModalOpen(true); }}
-          className="bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-800 transition flex items-center gap-2"
+          onClick={() => setIsModalOpen(true)}
+          className="bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-800 transition flex items-center gap-2"
         >
           <Plus className="w-4 h-4" /> Add Product
         </button>
@@ -121,21 +103,15 @@ export function AdminProducts() {
           <tbody className="divide-y divide-gray-100">
             {products.map(product => (
               <tr key={product.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 font-medium text-gray-900 group">
-                  <div className="flex items-center gap-3">
-                     <div className="w-10 h-10 rounded bg-gray-100 overflow-hidden flex-shrink-0">
-                       {product.imageUrl ? <img src={product.imageUrl} className="w-full h-full object-cover" /> : null}
-                     </div>
-                     <span className="truncate max-w-[200px] block">{product.name}</span>
+                <td className="px-6 py-4 font-medium text-gray-900 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded bg-gray-100 overflow-hidden flex-shrink-0">
+                    {product.imageUrl && <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />}
                   </div>
+                  {product.name}
                 </td>
                 <td className="px-6 py-4 text-gray-600">{product.category}</td>
-                <td className="px-6 py-4 text-gray-900 font-medium">₹{product.price.toLocaleString()}</td>
-                <td className="px-6 py-4 text-gray-600">
-                  <span className={product.stock <= 0 ? 'text-red-500 font-medium' : ''}>
-                    {product.stock}
-                  </span>
-                </td>
+                <td className="px-6 py-4 text-gray-900 font-bold">₹{product.price.toLocaleString()}</td>
+                <td className="px-6 py-4 text-gray-600">{product.stock}</td>
                 <td className="px-6 py-4 text-right">
                   <button onClick={() => handleEdit(product)} className="text-blue-600 hover:text-blue-800 p-2"><Edit2 className="w-4 h-4" /></button>
                   <button onClick={() => handleDelete(product.id)} className="text-red-600 hover:text-red-800 p-2"><Trash2 className="w-4 h-4" /></button>
@@ -147,8 +123,8 @@ export function AdminProducts() {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto w-full p-6 relative">
+        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-2xl p-6 relative">
             <button onClick={resetForm} className="absolute right-4 top-4 text-gray-400 hover:text-gray-900"><X /></button>
             <h2 className="text-xl font-bold mb-6">{editingId ? 'Edit Product' : 'Add New Product'}</h2>
             
@@ -181,7 +157,7 @@ export function AdminProducts() {
               </div>
               
               <div className="pt-4 flex justify-end gap-3">
-                <button type="button" onClick={resetForm} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium">Cancel</button>
+                <button type="button" onClick={resetForm} className="px-4 py-2 border border-gray-300 rounded-lg font-medium">Cancel</button>
                 <button type="submit" className="px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-800 font-medium">{editingId ? 'Update' : 'Create'}</button>
               </div>
             </form>

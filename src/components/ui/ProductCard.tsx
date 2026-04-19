@@ -1,18 +1,20 @@
+'use client';
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Heart, ShoppingCart, Star } from 'lucide-react';
-import { useCartStore } from '../../store/cartStore';
-import { useFavoriteStore } from '../../store/favoriteStore';
-import { cn } from '../../lib/utils';
+import { useCartStore } from '@/store/cartStore';
+import { useFavoriteStore } from '@/store/favoriteStore';
+import { cn } from '@/lib/utils';
 import { motion } from 'motion/react';
 
 export interface Product {
   id: string;
   name: string;
-  description?: string;
+  description?: string | null;
   price: number;
   category: string;
-  imageUrl?: string;
+  imageUrl?: string | null;
   stock: number;
   rating?: number;
   reviewCount?: number;
@@ -49,7 +51,7 @@ export function ProductCard({ product }: ProductCardProps) {
       whileHover={{ y: -4 }}
       className="group relative bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
     >
-      <Link to={`/product/${product.id}`} className="block block h-full flex flex-col">
+      <Link href={`/product/${product.id}`} className="block h-full flex flex-col">
         <div className="relative aspect-square overflow-hidden bg-gray-100">
           {product.imageUrl ? (
             <img 

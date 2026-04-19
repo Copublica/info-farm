@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useCartStore } from '../store/cartStore';
-import { useAuth } from '../lib/AuthContext';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db, handleFirestoreError, OperationType } from '../lib/firebase';
+'use client';
 
-export function Checkout() {
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useCartStore } from '@/store/cartStore';
+import { useAuth } from '@/lib/AuthContext';
+import { placeOrder } from '@/app/actions/order';
+
+export default function CheckoutPage() {
   const { items, getTotal, clearCart } = useCartStore();
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
   
   const [address, setAddress] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // If directly navigated without items
-  if (items.length === 0) {
-    navigate('/cart');
-    return null;
-  }
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/cart');
+    }
+    if (items.length === 0) {
+      router.push('/cart');
+    }
+  }, [user, authLoading, items, router]);
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +32,7 @@ export function Checkout() {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     try {
-      await addDoc(collection(db, 'orders'), {
+      await placeOrder({
         userId: user.uid,
         items: items.map(item => ({
           productId: item.productId,
@@ -37,20 +41,22 @@ export function Checkout() {
           quantity: item.quantity
         })),
         totalAmount: getTotal(),
-        status: 'pending',
-        shippingAddress: address,
-        paymentId: 'MOCK_PAYMENT_' + Math.random().toString(36).substr(2, 9).toUpperCase(),
-        createdAt: serverTimestamp()
+        shippingAddress: address
       });
       
       clearCart();
-      navigate('/orders');
+      router.push('/orders');
     } catch (err) {
-      handleFirestoreError(err, OperationType.CREATE, 'orders');
+      console.error(err);
+      alert("Failed to place order.");
     } finally {
       setIsProcessing(false);
     }
   };
+
+  if (authLoading || !user || items.length === 0) {
+    return <div className="py-24 text-center">Redirecting...</div>;
+  }
 
   return (
     <div className="py-12 max-w-3xl mx-auto">
@@ -62,7 +68,7 @@ export function Checkout() {
             <h2 className="text-xl font-semibold mb-4">Shipping Information</h2>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-              <input type="text" value={user?.displayName || ''} readOnly className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-500" />
+              <input type="text" value={user?.displayName || ''} readOnly className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 font-sans" />
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">Shipping Address</label>
