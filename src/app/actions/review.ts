@@ -11,15 +11,35 @@ export async function addReview(data: {
   comment: string;
 }) {
   try {
-     // Check if user exists in our prisma db, if not create them (linking firebase to prisma)
-     let dbUser = await prisma.user.findUnique({ where: { id_for_prisma: data.userId } as any });
-     // Wait, the prisma schema uses 'id' as ObjectId. 
-     // I should use a mapping field or make user id the firebase uid.
-     // Let's assume for 'simple' we use findFirst or similar.
-     
-     // Actually I'll update schema to handle firebase uid.
-     // For now I'll just create the review and link by String id if possible or just store userId as string.
+    const review = await prisma.review.create({
+      data: {
+        productId: data.productId,
+        userId: data.userId,
+        userName: data.userName,
+        rating: data.rating,
+        comment: data.comment,
+      }
+    });
+
+    // Update product rating
+    const productReviews = await prisma.review.findMany({
+      where: { productId: data.productId }
+    });
+
+    const avgRating = productReviews.reduce((acc, rev) => acc + rev.rating, 0) / productReviews.length;
+
+    await prisma.product.update({
+      where: { id: data.productId },
+      data: {
+        rating: avgRating,
+        reviewCount: productReviews.length
+      }
+    });
+    
+    revalidatePath(`/product/${data.productId}`);
+    return review;
   } catch (err) {
-    console.error(err);
+    console.error("Prisma Review Error:", err);
+    throw err;
   }
 }

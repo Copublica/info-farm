@@ -20,7 +20,7 @@ export default function OrdersPage() {
     }
 
     if (user) {
-      fetch(`/api/orders?userId=${user.uid}`)
+      fetch(`/api/orders?userId=${user.id}`)
         .then(res => res.json())
         .then(data => {
           setOrders(data);

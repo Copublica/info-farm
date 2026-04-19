@@ -33,7 +33,7 @@ export default function CheckoutPage() {
     
     try {
       await placeOrder({
-        userId: user.uid,
+        userId: user.id,
         items: items.map(item => ({
           productId: item.productId,
           name: item.name,
@@ -68,7 +68,7 @@ export default function CheckoutPage() {
             <h2 className="text-xl font-semibold mb-4">Shipping Information</h2>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-              <input type="text" value={user?.displayName || ''} readOnly className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 font-sans" />
+              <input type="text" value={user?.name || ''} readOnly className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 font-sans" />
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">Shipping Address</label>

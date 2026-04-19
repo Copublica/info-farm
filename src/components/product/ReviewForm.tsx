@@ -20,8 +20,8 @@ export function ReviewForm({ productId }: { productId: string }) {
     try {
       await addReview({
         productId,
-        userId: user.uid,
-        userName: user.displayName || 'Anonymous',
+        userId: user.id,
+        userName: user.name || 'Anonymous',
         rating,
         comment
       });

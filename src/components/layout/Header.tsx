@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/AuthContext";
-import { loginWithGoogle, logout } from "@/lib/firebase";
+import { signIn, signOut } from "next-auth/react";
 import { ShoppingCart, Heart, LogOut, Package, Gem, Menu, X } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 
@@ -16,7 +16,7 @@ export function Header() {
 
   const handleLogin = async () => {
     try {
-      await loginWithGoogle();
+      await signIn("google");
     } catch (error) {
       console.error(error);
     }
@@ -56,9 +56,9 @@ export function Header() {
           {user ? (
             <div className="flex items-center gap-4">
               <Link href="/orders" className="text-sm font-medium text-gray-700 hover:text-amber-700">
-                {user.displayName?.split(' ')[0]}
+                {user.name?.split(' ')[0]}
               </Link>
-              <button onClick={() => logout()} className="text-gray-400 hover:text-red-600 transition-colors" title="Logout">
+              <button onClick={() => signOut()} className="text-gray-400 hover:text-red-600 transition-colors" title="Logout">
                 <LogOut className="h-5 w-5" />
               </button>
             </div>
