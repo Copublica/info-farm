@@ -17,10 +17,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         // @ts-ignore
         session.user.id = user.id;
         // @ts-ignore
-        session.user.role = user.role || "customer";
+        session.user.role = (user as any).role || "customer";
       }
       return session;
     },
+  },
+  session: {
+    strategy: "database", // Ensure we are using database sessions as we have a Session model
   },
   pages: {
     signIn: "/auth/signin",
