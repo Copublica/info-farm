@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Heart, ShoppingCart, Star } from 'lucide-react';
+import { Heart, ShoppingCart, Star, Gem } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import { useFavoriteStore } from '@/store/favoriteStore';
 import { cn } from '@/lib/utils';
@@ -20,16 +20,14 @@ export interface Product {
   reviewCount?: number;
 }
 
-interface ProductCardProps {
-  product: Product;
-}
-
-export function ProductCard({ product }: ProductCardProps) {
-  const addItem = useCartStore(state => state.addItem);
+export function ProductCard({ product }: { product: Product }) {
+  const { addItem } = useCartStore();
   const { toggleFavorite, isFavorite } = useFavoriteStore();
+  const favorited = isFavorite(product.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     addItem({
       productId: product.id,
       name: product.name,
@@ -39,67 +37,78 @@ export function ProductCard({ product }: ProductCardProps) {
     });
   };
 
-  const handleFavorite = (e: React.MouseEvent) => {
+  const handleToggleFav = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     toggleFavorite(product.id);
   };
 
-  const hasStock = product.stock > 0;
-
   return (
     <motion.div 
-      whileHover={{ y: -4 }}
-      className="group relative bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -8 }}
+      className="group bg-white rounded-[2rem] overflow-hidden border border-gray-100/50 shadow-sm hover:shadow-2xl hover:shadow-amber-900/5 transition-all duration-500"
     >
-      <Link href={`/product/${product.id}`} className="block h-full flex flex-col">
-        <div className="relative aspect-square overflow-hidden bg-gray-100">
-          {product.imageUrl ? (
-            <img 
-              src={product.imageUrl} 
-              alt={product.name} 
-              referrerPolicy="no-referrer"
-              className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-            />
-          ) : (
-            <div className="flex items-center justify-center w-full h-full text-gray-400">No Image</div>
+      <Link href={`/product/${product.id}`} className="block relative aspect-[4/5] overflow-hidden">
+        {product.imageUrl ? (
+          <img 
+            src={product.imageUrl} 
+            alt={product.name} 
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+        ) : (
+          <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300">
+            <Gem className="w-12 h-12 opacity-20" />
+          </div>
+        )}
+        
+        {/* Overlay Actions */}
+        <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
+        <button 
+          onClick={handleToggleFav}
+          className={cn(
+            "absolute top-4 right-4 p-3 rounded-full backdrop-blur-md transition-all duration-300 z-10",
+            favorited 
+              ? "bg-amber-600 text-white" 
+              : "bg-white/80 text-gray-900 hover:bg-white pb-2"
           )}
-          
-          <button 
-            onClick={handleFavorite}
-            className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-md rounded-full text-gray-600 hover:text-red-500 transition-colors shadow-sm"
-          >
-            <Heart className={cn("w-5 h-5", isFavorite(product.id) && "fill-red-500 text-red-500")} />
-          </button>
+        >
+          <Heart className={cn("w-4.5 h-4.5", favorited && "fill-current")} />
+        </button>
+      </Link>
+
+      <div className="p-6">
+        <div className="flex flex-col gap-1 mb-4">
+          <span className="text-[10px] font-display font-bold uppercase tracking-[0.2em] text-amber-700/60">
+            {product.category}
+          </span>
+          <Link href={`/product/${product.id}`}>
+            <h3 className="text-xl font-serif text-gray-900 group-hover:text-amber-700 transition-colors line-clamp-1">
+              {product.name}
+            </h3>
+          </Link>
         </div>
 
-        <div className="p-4 flex flex-col flex-grow">
-          <div className="flex items-center gap-1 mb-2">
-            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm font-medium">{product.rating || '0.0'}</span>
-            <span className="text-xs text-gray-400">({product.reviewCount || 0})</span>
+        <div className="flex items-center justify-between mt-auto">
+          <div className="flex flex-col">
+            <span className="text-[10px] text-gray-400 uppercase tracking-widest font-medium">Price</span>
+            <span className="text-xl font-display font-semibold text-gray-900">
+              ₹{product.price.toLocaleString()}
+            </span>
           </div>
-          
-          <h3 className="font-semibold text-gray-900 line-clamp-1">{product.name}</h3>
-          
-          <div className="mt-1 flex items-center justify-between mb-4">
-            <span className="text-sm text-amber-700 font-medium">{product.category}</span>
-          </div>
-          
-          <div className="mt-auto flex items-center justify-between">
-            <span className="text-lg font-bold">₹{product.price.toLocaleString()}</span>
-            <button 
-              onClick={handleAddToCart}
-              disabled={!hasStock}
-              className={cn(
-                "p-2 rounded-full transition-colors",
-                hasStock ? "bg-amber-100 text-amber-700 hover:bg-amber-600 hover:text-white" : "bg-gray-100 text-gray-400 cursor-not-allowed"
-              )}
-            >
-              <ShoppingCart className="w-5 h-5" />
-            </button>
-          </div>
+
+          <button 
+            onClick={handleAddToCart}
+            className="w-12 h-12 bg-gray-900 text-white rounded-full flex items-center justify-center hover:bg-amber-700 transition-all duration-300 shadow-lg active:scale-95"
+            title="Add to Cart"
+          >
+            <ShoppingCart className="w-5 h-5" />
+          </button>
         </div>
-      </Link>
+      </div>
     </motion.div>
   );
 }

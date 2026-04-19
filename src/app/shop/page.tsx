@@ -34,49 +34,50 @@ export default async function ShopPage({
   const categories = allProducts.map(p => p.category);
 
   return (
-    <div className="py-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <div className="py-24 max-w-7xl mx-auto px-4">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Shop</h1>
-          <p className="text-gray-500 mt-1">Browse our premium dry fruits and certified gemstones.</p>
+          <span className="text-amber-700 font-display text-[10px] font-bold uppercase tracking-[0.3em] mb-4 block">The Collection</span>
+          <h1 className="text-5xl md:text-6xl font-serif text-gray-900 tracking-tight">Curated <span className="italic">Essentials</span></h1>
+          <p className="text-gray-500 mt-6 max-w-lg font-light leading-relaxed">Browse our carefully vetted collection of organic infusions and celestial gemstones.</p>
         </div>
 
-        <form className="flex flex-col sm:flex-row gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+        <form className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+          <div className="relative group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 group-focus-within:text-amber-600 transition-colors" />
             <input 
               name="q"
               defaultValue={query}
-              placeholder="Search products..." 
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none w-full sm:w-64"
+              placeholder="Search..." 
+              className="pl-12 pr-6 py-4 bg-white border border-gray-100 rounded-full focus:ring-2 focus:ring-amber-500/20 focus:outline-none w-full sm:w-64 transition-all shadow-sm group-hover:border-amber-200"
             />
           </div>
           
           <select 
             name="category"
             defaultValue={category}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white"
+            className="px-8 py-4 bg-white border border-gray-100 rounded-full focus:ring-2 focus:ring-amber-500/20 focus:outline-none appearance-none cursor-pointer uppercase tracking-widest text-[10px] font-bold text-gray-700 shadow-sm"
           >
             <option value="">All Categories</option>
             {categories.map(c => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>
-          <button type="submit" className="bg-amber-700 text-white px-6 py-2 rounded-lg font-medium hover:bg-amber-800 transition">
-            Filter
+          <button type="submit" className="bg-gray-900 text-white px-10 py-4 rounded-full font-display font-bold uppercase tracking-widest text-[10px] hover:bg-amber-700 transition-all shadow-lg active:scale-95">
+            Refine
           </button>
         </form>
       </div>
 
       {products.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {products.map(product => (
             <ProductCard key={product.id} product={product as any} />
           ))}
         </div>
       ) : (
-        <div className="text-center py-24 bg-white rounded-2xl border border-gray-200">
-          <p className="text-gray-500 text-lg">No products found matching your criteria.</p>
+        <div className="text-center py-32 bg-white rounded-[3rem] border border-dashed border-gray-100">
+          <p className="text-gray-400 font-serif italic text-xl">Our artisans are currently preparing new treasures. Please return shortly.</p>
         </div>
       )}
     </div>
