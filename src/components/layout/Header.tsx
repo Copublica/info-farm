@@ -11,6 +11,11 @@ export function Header() {
   const { user, role } = useAuth();
   const cartItems = useCartStore((state) => state.items);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -46,29 +51,31 @@ export function Header() {
           </Link>
           <Link href="/cart" className="p-2 text-gray-600 hover:text-amber-700 transition-colors relative">
             <ShoppingCart className="h-6 w-6" />
-            {cartCount > 0 && (
+            {(mounted && cartCount > 0) && (
               <span className="absolute -top-1 -right-1 bg-amber-700 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">
                 {cartCount}
               </span>
             )}
           </Link>
 
-          {user ? (
-            <div className="flex items-center gap-4">
-              <Link href="/orders" className="text-sm font-medium text-gray-700 hover:text-amber-700">
-                {user.name?.split(' ')[0]}
-              </Link>
-              <button onClick={() => signOut()} className="text-gray-400 hover:text-red-600 transition-colors" title="Logout">
-                <LogOut className="h-5 w-5" />
+          {mounted && (
+            user ? (
+              <div className="flex items-center gap-4">
+                <Link href="/orders" className="text-sm font-medium text-gray-700 hover:text-amber-700">
+                  {user.name?.split(' ')[0]}
+                </Link>
+                <button onClick={() => signOut()} className="text-gray-400 hover:text-red-600 transition-colors" title="Logout">
+                  <LogOut className="h-5 w-5" />
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={handleLogin} 
+                className="bg-amber-700 text-white px-8 py-2.5 rounded-full text-sm font-bold hover:bg-amber-800 transition-all shadow-sm active:scale-95"
+              >
+                Login
               </button>
-            </div>
-          ) : (
-            <button 
-              onClick={handleLogin} 
-              className="bg-amber-700 text-white px-8 py-2.5 rounded-full text-sm font-bold hover:bg-amber-800 transition-all shadow-sm active:scale-95"
-            >
-              Login
-            </button>
+            )
           )}
 
           <button className="md:hidden p-2 text-gray-600" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>

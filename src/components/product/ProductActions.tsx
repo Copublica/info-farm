@@ -10,6 +10,13 @@ import { motion } from 'motion/react';
 export function ProductActions({ product }: { product: any }) {
   const addItem = useCartStore(state => state.addItem);
   const { toggleFavorite, isFavorite } = useFavoriteStore();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const favorited = mounted && isFavorite(product.id);
 
   const handleAddToCart = () => {
     addItem({
@@ -41,13 +48,13 @@ export function ProductActions({ product }: { product: any }) {
         onClick={handleFavorite}
         className={cn(
           "px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 transition border-2",
-          isFavorite(product.id) 
+          favorited 
             ? "border-red-500 text-red-500 bg-red-50" 
             : "border-gray-200 text-gray-600 hover:border-red-500 hover:text-red-500"
         )}
       >
-        <Heart className={cn("w-5 h-5", isFavorite(product.id) && "fill-red-500")} /> 
-        {isFavorite(product.id) ? 'Favorited' : 'Add to Favorites'}
+        <Heart className={cn("w-5 h-5", favorited && "fill-red-500")} /> 
+        {favorited ? 'Favorited' : 'Add to Favorites'}
       </motion.button>
     </div>
   );

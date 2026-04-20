@@ -23,6 +23,12 @@ export interface Product {
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCartStore();
   const { toggleFavorite, isFavorite } = useFavoriteStore();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const favorited = isFavorite(product.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -66,7 +72,7 @@ export function ProductCard({ product }: { product: Product }) {
           onClick={handleToggleFav}
           className={cn(
             "absolute top-4 right-4 p-2.5 rounded-full shadow-md transition-all duration-300",
-            favorited ? "bg-white text-red-500" : "bg-white/80 text-gray-400 hover:text-red-500"
+            (mounted && favorited) ? "bg-white text-red-500" : "bg-white/80 text-gray-400 hover:text-red-500"
           )}
         >
           <Heart className="w-5 h-5 fill-current" />

@@ -11,6 +11,11 @@ export function ReviewForm({ productId }: { productId: string }) {
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +40,8 @@ export function ReviewForm({ productId }: { productId: string }) {
       setIsSubmitting(false);
     }
   };
+
+  if (!mounted) return null;
 
   if (!user) {
     return (
