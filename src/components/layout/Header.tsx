@@ -28,7 +28,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2">
           <Gem className="h-8 w-8 text-amber-700" />
           <span className="text-2xl font-bold tracking-tight text-gray-900">
-            Indo-Aura
+            Info-farm
           </span>
         </Link>
 

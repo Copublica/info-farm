@@ -69,7 +69,7 @@ export function ProductCard({ product }: { product: Product }) {
             favorited ? "bg-white text-red-500" : "bg-white/80 text-gray-400 hover:text-red-500"
           )}
         >
-          <Heart className={cn("w-5 h-5", favorited && "fill-current")} />
+          <Heart className="w-5 h-5 fill-current" />
         </button>
       </Link>
 
