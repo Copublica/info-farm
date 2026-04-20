@@ -41,6 +41,12 @@ export function Header() {
         <nav className="hidden md:flex flex-1 justify-center items-center gap-10 text-sm font-medium text-gray-700">
           <Link href="/" className="hover:text-amber-700 transition-colors">Home</Link>
           <Link href="/shop" className="hover:text-amber-700 transition-colors">Shop</Link>
+          {user && (
+            <Link href="/orders" className="hover:text-amber-700 transition-colors">My Orders</Link>
+          )}
+          {role === 'admin' && (
+            <Link href="/admin" className="text-amber-700 font-bold hover:text-amber-800 transition-colors">Dashboard</Link>
+          )}
           <Link href="/about" className="hover:text-amber-700 transition-colors">About</Link>
           <Link href="/contact" className="hover:text-amber-700 transition-colors">Contact</Link>
         </nav>
@@ -89,6 +95,12 @@ export function Header() {
         <div className="md:hidden absolute top-20 left-0 w-full bg-white border-b border-gray-100 p-4 space-y-4 z-50">
           <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 rounded-lg">Home</Link>
           <Link href="/shop" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 rounded-lg">Shop</Link>
+          {user && (
+            <Link href="/orders" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 rounded-lg">My Orders</Link>
+          )}
+          {role === 'admin' && (
+            <Link href="/admin" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2 font-bold text-amber-700 hover:bg-gray-50 rounded-lg underline">Admin Dashboard</Link>
+          )}
           <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 rounded-lg">About</Link>
           <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 rounded-lg">Contact</Link>
           {role === 'admin' && (

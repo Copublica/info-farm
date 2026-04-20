@@ -7,9 +7,21 @@ import { ShoppingCart, Trash2, Plus, Minus, ArrowRight, ShoppingBag } from 'luci
 import { motion, AnimatePresence } from 'motion/react';
 import { useRouter } from 'next/navigation';
 
+import { useAuth } from '@/lib/AuthContext';
+import { signIn } from 'next-auth/react';
+
 export default function CartPage() {
   const { items, removeItem, updateQuantity, getTotal } = useCartStore();
+  const { user } = useAuth();
   const router = useRouter();
+
+  const handleCheckout = () => {
+    if (!user) {
+      signIn('google');
+      return;
+    }
+    router.push('/checkout');
+  };
 
   if (items.length === 0) {
     return (
@@ -107,7 +119,7 @@ export default function CartPage() {
             </div>
             
             <button 
-              onClick={() => router.push('/checkout')}
+              onClick={handleCheckout}
               className="w-full bg-amber-700 text-white py-4 rounded-xl items-center justify-center font-bold text-lg hover:bg-amber-800 transition flex gap-2"
             >
               Proceed to Checkout <ArrowRight className="w-5 h-5" />

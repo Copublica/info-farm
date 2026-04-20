@@ -28,6 +28,11 @@ export default function AdminOrdersPage() {
     fetchOrders();
   };
 
+  const handleSendPaymentLink = (order: any) => {
+    const message = `Hello! Regarding your order ${order.id.slice(-8).toUpperCase()} at Indo-Farm.%0A%0AOrder details:%0A${order.items.map((item: any) => `- ${item.name} (x${item.quantity})`).join('%0A')}%0A%0ATotal Amount: $${order.totalAmount}%0A%0APlease complete your payment using this link: [ADD PAYMENT LINK HERE]%0A%0AThank you!`;
+    window.open(`https://wa.me/?text=${message}`, '_blank');
+  };
+
   if (loading) return <div>Loading orders...</div>;
 
   return (
@@ -64,13 +69,21 @@ export default function AdminOrdersPage() {
                     className="p-1 border border-gray-300 rounded text-xs focus:ring-amber-500 focus:outline-none"
                   >
                     <option value="pending">Pending</option>
+                    <option value="payment_link_sent">Payment Link Sent</option>
+                    <option value="confirmed_payment">Confirmed Payment</option>
                     <option value="processing">Processing</option>
                     <option value="shipped">Shipped</option>
                     <option value="delivered">Delivered</option>
                     <option value="cancelled">Cancelled</option>
                   </select>
                 </td>
-                <td className="px-6 py-4 text-right">
+                <td className="px-6 py-4 text-right flex items-center justify-end gap-3">
+                  <button 
+                    onClick={() => handleSendPaymentLink(order)}
+                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-[10px] font-bold uppercase transition"
+                  >
+                    Send Payment Link
+                  </button>
                   <span className="text-xs text-gray-400">
                     {format(new Date(order.createdAt), 'MMM d, HH:mm')}
                   </span>
