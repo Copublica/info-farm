@@ -50,12 +50,12 @@ export function ProductCard({ product }: { product: Product }) {
       viewport={{ once: true }}
       className="bg-white rounded-[24px] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100"
     >
-      <Link href={`/product/${product.id}`} className="block relative aspect-square overflow-hidden">
+      <Link href={`/product/${product.id}`} className="block relative aspect-square overflow-hidden bg-white p-4">
         {product.imageUrl ? (
           <img 
             src={product.imageUrl} 
             alt={product.name} 
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
           />
         ) : (
           <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300">
@@ -81,7 +81,7 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
         
         <Link href={`/product/${product.id}`}>
-          <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1 group-hover:text-amber-700 transition-colors">
+          <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-2 group-hover:text-amber-700 transition-colors h-14">
             {product.name}
           </h3>
         </Link>

@@ -148,8 +148,8 @@ export default function AdminProductsPage() {
             {products.map(product => (
               <tr key={product.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 font-medium text-gray-900 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded bg-gray-100 overflow-hidden flex-shrink-0">
-                    {product.imageUrl && <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />}
+                  <div className="w-10 h-10 rounded bg-white border border-gray-200 overflow-hidden flex-shrink-0 p-1">
+                    {product.imageUrl && <img src={product.imageUrl} alt={product.name} className="w-full h-full object-contain" />}
                   </div>
                   {product.name}
                 </td>
@@ -208,8 +208,8 @@ export default function AdminProductsPage() {
                       <p className="mt-1 text-[10px] text-gray-400 italic font-mono">Recommended: Square image, max 2MB</p>
                     </div>
                     {imagePreview && (
-                      <div className="w-24 h-24 rounded-xl border border-gray-200 overflow-hidden bg-white shadow-sm flex-shrink-0 animate-in fade-in zoom-in duration-200">
-                        <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                      <div className="w-24 h-24 rounded-xl border border-gray-200 overflow-hidden bg-white shadow-sm flex-shrink-0 animate-in fade-in zoom-in duration-200 p-2">
+                        <img src={imagePreview} alt="Preview" className="w-full h-full object-contain" />
                       </div>
                     )}
                   </div>
