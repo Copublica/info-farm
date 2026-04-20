@@ -49,18 +49,40 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
     }
 
-    // Upload directly to Vercel Blob
+    // Optional but recommended: File validation
+    if (file.size > 10 * 1024 * 1024) { // 10 MB limit
+      return NextResponse.json({ error: 'File size must be less than 10MB' }, { status: 400 });
+    }
+
+    if (!file.type.startsWith('image/')) {
+      return NextResponse.json({ error: 'Only image files are allowed' }, { status: 400 });
+    }
+
+    // Upload to Vercel Blob
     const blob = await put(file.name, file, {
-      access: 'public',           // ya 'private' if needed
-      addRandomSuffix: true,      // unique name ke liye
+      access: 'public',           // Public URL chahiye toh 'public' rakho
+      addRandomSuffix: true,      // Unique naam ke liye (recommended)
     });
 
-    return NextResponse.json({ 
-      imageUrl: blob.url,         // yeh direct public URL milega
-      blob 
+    console.log('✅ Image uploaded successfully:', blob.url);
+
+    return NextResponse.json({
+      success: true,
+      imageUrl: blob.url,         // Yeh URL directly <img> tag mein use kar sakte ho
+      blob,                       // Extra info (pathname, size, etc.) debug ke liye
     });
-  } catch (error) {
-    console.error('Upload error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+
+  } catch (error: any) {
+    console.error('❌ Vercel Blob Upload Error:', error);
+
+    let errorMessage = 'Internal Server Error';
+
+    if (error?.message?.includes('token') || error?.message?.includes('No token found')) {
+      errorMessage = 'Blob token missing. Please check BLOB_READ_WRITE_TOKEN in environment variables.';
+    } else if (error?.message?.includes('size')) {
+      errorMessage = 'File too large or invalid.';
+    }
+
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
