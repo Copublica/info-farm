@@ -30,7 +30,8 @@ export default function AdminOrdersPage() {
 
   const handleSendPaymentLink = (order: any) => {
     const message = `Hello! Regarding your order ${order.id.slice(-8).toUpperCase()} at Indo-Farm.%0A%0AOrder details:%0A${order.items.map((item: any) => `- ${item.name} (x${item.quantity})`).join('%0A')}%0A%0ATotal Amount: $${order.totalAmount}%0A%0APlease complete your payment using this link: [ADD PAYMENT LINK HERE]%0A%0AThank you!`;
-    window.open(`https://wa.me/?text=${message}`, '_blank');
+    const phone = order.whatsappNo ? order.whatsappNo.replace(/[^0-9]/g, '') : '';
+    window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };
 
   if (loading) return <div>Loading orders...</div>;
@@ -45,6 +46,7 @@ export default function AdminOrdersPage() {
             <tr>
               <th className="px-6 py-3 font-medium">Order ID</th>
               <th className="px-6 py-3 font-medium">Customer UID</th>
+              <th className="px-6 py-3 font-medium">WhatsApp</th>
               <th className="px-6 py-3 font-medium">Total</th>
               <th className="px-6 py-3 font-medium">Status</th>
               <th className="px-6 py-3 font-medium text-right">Actions</th>
@@ -58,6 +60,9 @@ export default function AdminOrdersPage() {
                 </td>
                 <td className="px-6 py-4 text-gray-600">
                   {order.userId}
+                </td>
+                <td className="px-6 py-4 text-gray-600 font-medium">
+                  {order.whatsappNo || 'N/A'}
                 </td>
                 <td className="px-6 py-4 font-bold">
                   ${order.totalAmount.toLocaleString()}

@@ -85,6 +85,7 @@ model Order {
   totalAmount     Float
   status          String   @default("pending")
   shippingAddress String
+  whatsappNo      String?
   paymentId       String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

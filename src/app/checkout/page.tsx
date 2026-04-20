@@ -12,6 +12,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   
   const [address, setAddress] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
@@ -41,7 +42,8 @@ export default function CheckoutPage() {
           quantity: item.quantity
         })),
         totalAmount: getTotal(),
-        shippingAddress: address
+        shippingAddress: address,
+        whatsappNo: whatsapp
       });
       
       clearCart();
@@ -69,6 +71,18 @@ export default function CheckoutPage() {
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
               <input type="text" value={user?.name || ''} readOnly className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 font-sans" />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp Number</label>
+              <input 
+                required
+                type="tel"
+                value={whatsapp}
+                onChange={e => setWhatsapp(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                placeholder="e.g. +91 9876543210"
+              />
+              <p className="text-[10px] text-gray-400 mt-1">We will send the payment link to this number.</p>
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">Shipping Address</label>
