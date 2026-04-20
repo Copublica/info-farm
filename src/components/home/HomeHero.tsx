@@ -3,16 +3,14 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 import { motion } from 'motion/react';
+import heroImage from '@/app/banner.png';
 
 export function HomeHero() {
   return (
     <section className="relative w-full h-[500px] sm:h-[600px] overflow-hidden rounded-[40px] mt-4 max-w-7xl mx-auto shadow-xl">
-      <img 
-        src="https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=2070&auto=format&fit=crop" 
-        alt="Nourish Your Body" 
-        className="absolute inset-0 w-full h-full object-cover"
-      />
+      <Image src={heroImage} alt="Nourish Your Body" className="absolute inset-0 w-full h-full object-cover" /> 
       <div className="absolute inset-0 bg-gradient-to-r from-amber-950/90 to-amber-900/20"></div>
       
       <div className="relative h-full flex flex-col items-start justify-center p-8 sm:p-20 max-w-2xl">
