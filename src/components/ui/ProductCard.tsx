@@ -95,7 +95,7 @@ export function ProductCard({ product }: { product: Product }) {
         <p className="text-sm font-semibold text-amber-600 mb-4">{product.category}</p>
         
         <div className="flex items-center justify-between">
-          <span className="text-xl font-black text-gray-900">₹{product.price.toLocaleString()}</span>
+          <span className="text-xl font-black text-gray-900">${product.price.toLocaleString()}</span>
           <button 
             onClick={handleAddToCart}
             className="bg-orange-50 text-orange-600 p-3 rounded-full hover:bg-orange-500 hover:text-white transition-all shadow-sm"

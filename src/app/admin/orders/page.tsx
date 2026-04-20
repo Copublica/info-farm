@@ -55,7 +55,7 @@ export default function AdminOrdersPage() {
                   {order.userId}
                 </td>
                 <td className="px-6 py-4 font-bold">
-                  ₹{order.totalAmount.toLocaleString()}
+                  ${order.totalAmount.toLocaleString()}
                 </td>
                 <td className="px-6 py-4">
                   <select 

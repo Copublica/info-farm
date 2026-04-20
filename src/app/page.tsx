@@ -93,7 +93,7 @@ export default async function HomePage() {
           </h2>
           <div className="w-12 h-[1px] bg-amber-500/50 mx-auto mb-8" />
           <p className="text-gray-400 font-light text-lg mb-12">
-            Indo-Aura was born from a pursuit of holistic vitality, bridging ancient Himalayan wisdom with modern lifestyle.
+            Indo-Farm was born from a pursuit of holistic vitality, bridging ancient Himalayan wisdom with modern lifestyle.
           </p>
           <Link href="/about" className="text-white font-display font-bold uppercase tracking-widest text-[10px] bg-white/5 border border-white/20 px-8 py-4 rounded-full hover:bg-white/10 transition-all">
             Read Our Story

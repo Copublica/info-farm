@@ -59,7 +59,7 @@ export default function OrdersPage() {
                   </div>
                   <div>
                     <div className="text-xs uppercase text-gray-400 font-bold mb-1">Total</div>
-                    <div className="text-sm font-bold">₹{order.totalAmount.toLocaleString()}</div>
+                    <div className="text-sm font-bold">${order.totalAmount.toLocaleString()}</div>
                   </div>
                   <div>
                     <div className="text-xs uppercase text-gray-400 font-bold mb-1">Order ID</div>
@@ -80,7 +80,7 @@ export default function OrdersPage() {
                       </div>
                       <div className="flex-1">
                         <div className="font-semibold">{item.name}</div>
-                        <div className="text-sm text-gray-500">₹{item.price.toLocaleString()} per unit</div>
+                        <div className="text-sm text-gray-500">${item.price.toLocaleString()} per unit</div>
                       </div>
                     </div>
                   ))}

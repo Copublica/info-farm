@@ -101,7 +101,7 @@ export default function CheckoutPage() {
           <div className="border-t border-gray-200 pt-6">
             <div className="flex justify-between font-bold text-xl mb-6">
               <span>Total to Pay</span>
-              <span>₹{getTotal().toLocaleString()}</span>
+              <span>${getTotal().toLocaleString()}</span>
             </div>
             
             <button 

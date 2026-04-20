@@ -53,7 +53,7 @@ export default function CartPage() {
                   <Link href={`/product/${item.productId}`} className="font-semibold text-lg hover:text-amber-700 transition">
                     {item.name}
                   </Link>
-                  <div className="text-gray-500 mt-1">₹{item.price.toLocaleString()}</div>
+                  <div className="text-gray-500 mt-1">${item.price.toLocaleString()}</div>
                 </div>
                 
                 <div className="flex items-center gap-3 bg-gray-50 p-2 rounded-lg">
@@ -73,7 +73,7 @@ export default function CartPage() {
                 </div>
                 
                 <div className="w-24 text-right font-bold">
-                  ₹{(item.price * item.quantity).toLocaleString()}
+                  ${(item.price * item.quantity).toLocaleString()}
                 </div>
                 
                 <button 
@@ -94,7 +94,7 @@ export default function CartPage() {
             <div className="space-y-4 mb-6">
               <div className="flex justify-between text-gray-600">
                 <span>Subtotal</span>
-                <span>₹{getTotal().toLocaleString()}</span>
+                <span>${getTotal().toLocaleString()}</span>
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Shipping</span>
@@ -102,7 +102,7 @@ export default function CartPage() {
               </div>
               <div className="border-t border-gray-100 pt-4 flex justify-between font-bold text-xl">
                 <span>Total</span>
-                <span className="text-gray-900">₹{getTotal().toLocaleString()}</span>
+                <span className="text-gray-900">${getTotal().toLocaleString()}</span>
               </div>
             </div>
             
@@ -114,7 +114,7 @@ export default function CartPage() {
             </button>
             
             <p className="text-center text-xs text-gray-400 mt-4">
-              Secure payments powered by Indo-Aura Checkout.
+              Secure payments powered by Indo-Farm Checkout.
             </p>
           </div>
         </div>

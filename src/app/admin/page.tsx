@@ -154,7 +154,7 @@ export default function AdminProductsPage() {
                   {product.name}
                 </td>
                 <td className="px-6 py-4 text-gray-600">{product.category}</td>
-                <td className="px-6 py-4 text-gray-900 font-bold">₹{product.price.toLocaleString()}</td>
+                <td className="px-6 py-4 text-gray-900 font-bold">${product.price.toLocaleString()}</td>
                 <td className="px-6 py-4 text-gray-600">{product.stock}</td>
                 <td className="px-6 py-4 text-right">
                   <button onClick={() => handleEdit(product)} className="text-blue-600 hover:text-blue-800 p-2"><Edit2 className="w-4 h-4" /></button>
@@ -183,7 +183,7 @@ export default function AdminProductsPage() {
                   <input required type="text" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-2 border border-gray-300 rounded focus:ring-amber-500" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Price (₹)</label>
+                  <label className="block text-sm font-medium mb-1">Price ($)</label>
                   <input required type="number" min="0" step="0.01" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full p-2 border border-gray-300 rounded focus:ring-amber-500" />
                 </div>
                 <div>

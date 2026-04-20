@@ -57,7 +57,7 @@ export default async function ProductDetailsPage({
             <span className="text-gray-500">{product.reviewCount} reviews</span>
           </div>
           
-          <div className="text-3xl font-bold text-gray-900 mb-6">₹{product.price.toLocaleString()}</div>
+          <div className="text-3xl font-bold text-gray-900 mb-6">${product.price.toLocaleString()}</div>
           
           <div className="prose prose-sm text-gray-600 mb-8 whitespace-pre-line">
             {product.description}
