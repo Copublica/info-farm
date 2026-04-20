@@ -5,8 +5,6 @@ import { ProductCard } from '@/components/ui/ProductCard';
 import { ArrowRight, Globe, ShieldCheck, Truck } from 'lucide-react';
 import { HomeHero } from '@/components/home/HomeHero';
 import { seedProducts } from '@/app/actions/product';
-import Terms from '@/components/home/terms';
-
 
 export default async function HomePage() {
   let featuredProducts: any[] = [];
@@ -84,7 +82,6 @@ export default async function HomePage() {
           </div>
         )}
       </section>
-      <Terms></Terms>
 
       {/* Philosophy Placeholder */}
       <section className="py-24 bg-[#1a1a1a] rounded-[3rem] mx-4 mb-24 overflow-hidden relative">

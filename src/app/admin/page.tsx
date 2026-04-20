@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Plus, Edit2, Trash2, X } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { Plus, Edit2, Trash2, X, Upload, ImageIcon } from 'lucide-react';
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -17,6 +18,10 @@ export default function AdminProductsPage() {
     imageUrl: '',
     stock: '',
   });
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchProducts = async () => {
     const res = await fetch('/api/products');
@@ -28,6 +33,15 @@ export default function AdminProductsPage() {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+    }
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete product?")) return;
@@ -45,19 +59,48 @@ export default function AdminProductsPage() {
       stock: product.stock.toString(),
     });
     setEditingId(product.id);
+    setImagePreview(product.imageUrl || null);
     setIsModalOpen(true);
   };
 
   const resetForm = () => {
     setFormData({ name: '', description: '', price: '', category: '', imageUrl: '', stock: '' });
     setEditingId(null);
+    setSelectedFile(null);
+    setImagePreview(null);
     setIsModalOpen(false);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setUploading(true);
+    
+    let finalImageUrl = formData.imageUrl;
+
+    if (selectedFile) {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', selectedFile);
+      
+      try {
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          body: uploadFormData,
+        });
+        const uploadData = await uploadRes.json();
+        if (uploadData.imageUrl) {
+          finalImageUrl = uploadData.imageUrl;
+        }
+      } catch (error) {
+        console.error("Upload error:", error);
+        setUploading(false);
+        return;
+      }
+    }
+
     const payload = {
       ...formData,
+      imageUrl: finalImageUrl,
       price: Number(formData.price),
       stock: Number(formData.stock),
     };
@@ -71,6 +114,7 @@ export default function AdminProductsPage() {
       body: JSON.stringify(payload),
     });
 
+    setUploading(false);
     resetForm();
     fetchProducts();
   };
@@ -147,8 +191,28 @@ export default function AdminProductsPage() {
                   <input required type="number" min="0" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} className="w-full p-2 border border-gray-300 rounded focus:ring-amber-500" />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Image URL</label>
-                  <input type="text" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} className="w-full p-2 border border-gray-300 rounded focus:ring-amber-500" />
+                  <label className="block text-sm font-medium mb-1">Product Image</label>
+                  <div className="flex items-start gap-4">
+                    <div className="flex-1">
+                      <div className="relative border-2 border-dashed border-gray-300 rounded-xl p-4 hover:border-amber-500 transition-colors bg-gray-50 flex flex-col items-center justify-center gap-2 cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                        <Upload className="w-6 h-6 text-gray-400" />
+                        <span className="text-xs text-gray-500 font-medium">{selectedFile ? selectedFile.name : 'Click to upload image'}</span>
+                        <input 
+                          type="file" 
+                          ref={fileInputRef}
+                          onChange={handleFileChange}
+                          accept="image/*"
+                          className="hidden"
+                        />
+                      </div>
+                      <p className="mt-1 text-[10px] text-gray-400 italic font-mono">Recommended: Square image, max 2MB</p>
+                    </div>
+                    {imagePreview && (
+                      <div className="w-24 h-24 rounded-xl border border-gray-200 overflow-hidden bg-white shadow-sm flex-shrink-0 animate-in fade-in zoom-in duration-200">
+                        <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="sm:col-span-2">
                   <label className="block text-sm font-medium mb-1">Description</label>
@@ -158,7 +222,20 @@ export default function AdminProductsPage() {
               
               <div className="pt-4 flex justify-end gap-3">
                 <button type="button" onClick={resetForm} className="px-4 py-2 border border-gray-300 rounded-lg font-medium">Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-800 font-medium">{editingId ? 'Update' : 'Create'}</button>
+                <button 
+                  type="submit" 
+                  disabled={uploading}
+                  className="px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {uploading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    editingId ? 'Update' : 'Create'
+                  )}
+                </button>
               </div>
             </form>
           </div>
