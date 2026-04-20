@@ -14,7 +14,7 @@ export function Footer() {
             <Link href="/" className="flex items-center gap-2 group">
               <Gem className="h-8 w-8 text-amber-500Group-hover:rotate-12 transition-transform" />
               <span className="text-2xl font-bold tracking-tight text-white group-hover:text-amber-500 transition-colors">
-                Info-farm
+                Indo-Farm
               </span>
             </Link>
             <p className="text-gray-400 leading-relaxed text-sm max-w-xs">
@@ -64,7 +64,7 @@ export function Footer() {
         </div>
 
         <div className="pt-10 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-medium">
-          <p>© 2026 Info-farm. All rights reserved.</p>
+          <p>© 2026 Indo-Farm. All rights reserved.</p>
           <div className="flex gap-8">
             <Link href="/privacy" className="hover:text-amber-500 transition-colors">Privacy Policy</Link>
             <Link href="/shipping" className="hover:text-amber-500 transition-colors">Shipping Policy</Link>

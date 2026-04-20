@@ -9,7 +9,7 @@ import { Providers } from "@/components/providers/Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Indo-Aura E-Commerce",
+  title: "Indo-Farm",
   description: "Premium dry fruits and astrology lucky stones.",
 };
 
