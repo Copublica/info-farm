@@ -10,7 +10,7 @@ export default function CheckoutPage() {
   const { items, getTotal, clearCart } = useCartStore();
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
-  
+
   const [address, setAddress] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -27,11 +27,11 @@ export default function CheckoutPage() {
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
-    
+
     setIsProcessing(true);
     // Simulate payment processing
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
+
     try {
       await placeOrder({
         userId: user.id,
@@ -45,7 +45,7 @@ export default function CheckoutPage() {
         shippingAddress: address,
         whatsappNo: whatsapp
       });
-      
+
       clearCart();
       router.push('/orders');
     } catch (err) {
@@ -63,7 +63,7 @@ export default function CheckoutPage() {
   return (
     <div className="py-12 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold mb-8">Checkout</h1>
-      
+
       <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8">
         <form onSubmit={handlePayment}>
           <div className="mb-8">
@@ -74,7 +74,7 @@ export default function CheckoutPage() {
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp Number</label>
-              <input 
+              <input
                 required
                 type="tel"
                 value={whatsapp}
@@ -86,39 +86,64 @@ export default function CheckoutPage() {
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">Shipping Address</label>
-              <textarea 
+              <textarea
                 required
                 value={address}
                 onChange={e => setAddress(e.target.value)}
-                rows={3} 
+                rows={3}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none"
                 placeholder="123 Wellness Blvd, Inner Peace District..."
               />
             </div>
           </div>
-          
+
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4">Payment Method</h2>
-            <div className="p-4 border border-amber-500 bg-amber-50 rounded-lg flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <input type="radio" checked readOnly className="text-amber-600 focus:ring-amber-500 w-4 h-4" />
-                <span className="font-medium text-amber-900">Credit/Debit Card (Mock)</span>
+
+            <div className="p-6 border border-green-500 bg-green-50 rounded-2xl flex flex-col gap-4">
+              <div className="flex items-start gap-4">
+                <input
+                  type="radio"
+                  checked
+                  readOnly
+                  className="mt-1 text-green-600 focus:ring-green-500 w-5 h-5"
+                />
+                <div>
+                  <p className="font-semibold text-green-900">WhatsApp Order Confirmation</p>
+                  <p className="text-sm text-green-700 mt-1">
+                    We will send your purchase details and order updates directly on WhatsApp
+                  </p>
+                </div>
               </div>
-              <div className="flex gap-2">
-                 <div className="w-8 h-5 bg-blue-600 rounded flex items-center justify-center text-[8px] text-white font-bold">VISA</div>
-                 <div className="w-8 h-5 bg-orange-500 rounded flex items-center justify-center text-[8px] text-white font-bold">MC</div>
+
+              <div className="bg-white rounded-xl p-4 text-sm border border-green-100">
+                <div className="flex items-center gap-3 text-green-800">
+                  <span className="text-xl">💬</span>
+                  <div>
+                    <p className="font-medium">You will receive:</p>
+                    <ul className="text-xs text-green-700 mt-2 space-y-1">
+                      <li>• Order confirmation with invoice</li>
+                      <li>• Payment instructions (UPI / Bank Transfer)</li>
+                      <li>• Shipping updates</li>
+                      <li>• Delivery tracking link</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-2">Note: This is a simulated checkout. No real payment will be taken.</p>
+
+            <p className="text-xs text-gray-500 mt-3 text-center">
+              No payment is taken here. We will contact you on WhatsApp to complete your purchase securely.
+            </p>
           </div>
-          
+
           <div className="border-t border-gray-200 pt-6">
             <div className="flex justify-between font-bold text-xl mb-6">
               <span>Total to Pay</span>
               <span>${getTotal().toLocaleString()}</span>
             </div>
-            
-            <button 
+
+            <button
               type="submit"
               disabled={isProcessing}
               className="w-full bg-amber-700 text-white py-4 rounded-xl font-bold text-lg hover:bg-amber-800 transition disabled:opacity-70 flex justify-center"
