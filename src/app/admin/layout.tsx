@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/AuthContext';
-import { LayoutDashboard, Package, ShoppingBag, Settings, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingBag, Settings, ChevronRight,  } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -24,6 +24,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const navItems = [
     { label: 'Products', icon: Package, href: '/admin' },
     { label: 'Orders', icon: ShoppingBag, href: '/admin/orders' },
+    { label: 'Sales', icon: ShoppingBag, href: '/admin/sales' },
   ];
 
   return (
