@@ -29,7 +29,7 @@ export function HomeHero() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-lg sm:text-xl text-gray-200 mb-10 leading-relaxed font-medium"
         >
-          Direct access to premium organic dry fruits and certified authentic astrology gemstones from Indo-Farm.
+          Direct access to premium organic dry fruits and certified authentic astrology gemstones from Indo-Farms.
         </motion.p>
         
         <motion.div

@@ -56,7 +56,7 @@ export default function AdminOrdersPage() {
   };
 
   const handleSendPaymentLink = (order: Order) => {
-    const message = `Hello! Regarding your order ${order.id.slice(-8).toUpperCase()} at Indo-Farm.%0A%0AOrder details:%0A${order.items
+    const message = `Hello! Regarding your order ${order.id.slice(-8).toUpperCase()} at Indo-Farms.%0A%0AOrder details:%0A${order.items
       .map((item) => `- ${item.name} (x${item.quantity})`)
       .join('%0A')}%0A%0ATotal Amount: $${order.totalAmount}%0A%0APlease complete your payment using this link: [ADD PAYMENT LINK HERE]%0A%0AThank you!`;
 

@@ -126,7 +126,7 @@ export default function CartPage() {
             </button>
             
             <p className="text-center text-xs text-gray-400 mt-4">
-              Secure payments powered by Indo-Farm Checkout.
+              Secure payments powered by Indo-Farms Checkout.
             </p>
           </div>
         </div>
