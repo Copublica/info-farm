@@ -100,7 +100,7 @@ export default function Terms() {
     <section className="py-20 bg-gray-50 px-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Terms & Conditions</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Terms & Conditions</h2>
           <p className="text-gray-600 text-lg">Please read our terms carefully before making any purchase</p>
         </div>
 
